@@ -1,0 +1,6 @@
+{
+  "name": "RepoPulse",
+  "description": "Discover the most-starred GitHub repositories created within recent time periods and analyze weekly development activity and contributor trends.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
