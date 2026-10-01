@@ -14,9 +14,21 @@ import { ErrorState } from './components/ErrorState';
 import { AnalyticsPage } from './components/AnalyticsPage';
 import { DesignSpecModal } from './components/DesignSpecModal';
 import { ArrowDown, ShieldCheck, GitBranch } from 'lucide-react';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
+import {
+  setSelectedPeriod,
+  setSelectedRepository,
+} from './redux/slices/repositoriesSlice';
+import {
+  selectSelectedPeriod,
+  selectSelectedRepository,
+} from './redux/selectors/repositoriesSelectors';
 
 export default function App() {
-  const [period, setPeriod] = useState<TimePeriod>('1week');
+  const dispatch = useAppDispatch();
+  const period = useAppSelector(selectSelectedPeriod);
+  const selectedRepo = useAppSelector(selectSelectedRepository);
+
   // Initialize synchronously with mock data so initial screen renders instantly without external network calls
   const [repositories, setRepositories] = useState<Repository[]>(() => MOCK_REPOSITORIES['1week']);
   const [page, setPage] = useState(1);
@@ -27,9 +39,6 @@ export default function App() {
   const [isMockMode, setIsMockMode] = useState(true);
   const [isUsingFallback, setIsUsingFallback] = useState(false);
 
-  // Analytics view state
-  const [selectedRepo, setSelectedRepo] = useState<Repository | null>(null);
-
   // Design spec modal state
   const [isSpecModalOpen, setIsSpecModalOpen] = useState(false);
 
@@ -39,7 +48,7 @@ export default function App() {
   // Period change handler: immediately updates synchronously from mock or triggers live fetch
   const handlePeriodChange = (newPeriod: TimePeriod) => {
     if (newPeriod === period) return;
-    setPeriod(newPeriod);
+    dispatch(setSelectedPeriod(newPeriod));
     setPage(1);
 
     if (isMockMode) {
@@ -143,7 +152,7 @@ export default function App() {
       {/* GitHub-style Header */}
       <Header
         onOpenDesignSpec={() => setIsSpecModalOpen(true)}
-        onNavigateHome={() => setSelectedRepo(null)}
+        onNavigateHome={() => dispatch(setSelectedRepository(null))}
         isMockMode={isMockMode || isUsingFallback}
         onToggleMockMode={handleToggleMock}
         currentView={selectedRepo ? 'analytics' : 'list'}
@@ -156,7 +165,7 @@ export default function App() {
           /* ================= ANALYTICS SCREEN ================= */
           <AnalyticsPage
             repository={selectedRepo}
-            onBack={() => setSelectedRepo(null)}
+            onBack={() => dispatch(setSelectedRepository(null))}
           />
         ) : (
           /* ================= MAIN REPOSITORY LISTING ================= */
@@ -235,7 +244,7 @@ export default function App() {
                     key={`${repo.id}-${index}`}
                     repository={repo}
                     index={index}
-                    onSelect={(selected) => setSelectedRepo(selected)}
+                    onSelect={(selected) => dispatch(setSelectedRepository(selected))}
                   />
                 ))}
 

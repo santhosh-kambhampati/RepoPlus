@@ -2,6 +2,8 @@ import React, { useMemo } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { WeeklyStat, MetricType } from '../types';
+
+const HighchartsReactComponent = ((HighchartsReact as any).default || HighchartsReact) as typeof HighchartsReact;
 import { formatCommaNumber, formatShortWeek } from '../utils/formatters';
 import { GitCommit, PlusCircle, MinusCircle } from 'lucide-react';
 
@@ -211,7 +213,7 @@ export const TotalChangesChart: React.FC<TotalChangesChartProps> = ({ weeklyData
 
       {/* Highcharts Render */}
       <div className="w-full overflow-hidden">
-        <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+        <HighchartsReactComponent highcharts={Highcharts} options={chartOptions} />
       </div>
     </div>
   );

@@ -2,6 +2,8 @@ import React, { useMemo, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { Contributor, MetricType } from '../types';
+
+const HighchartsReactComponent = ((HighchartsReact as any).default || HighchartsReact) as typeof HighchartsReact;
 import { formatCommaNumber, formatShortWeek } from '../utils/formatters';
 import { Users, CheckSquare, Square } from 'lucide-react';
 
@@ -266,7 +268,7 @@ export const ContributorChangesChart: React.FC<ContributorChangesChartProps> = (
 
       {/* Highcharts Multi-line Render */}
       <div className="w-full overflow-hidden">
-        <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+        <HighchartsReactComponent highcharts={Highcharts} options={chartOptions} />
       </div>
     </div>
   );
